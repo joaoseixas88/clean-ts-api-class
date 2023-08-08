@@ -8,18 +8,23 @@ export class SignUpController implements Controller {
 		private readonly emailValidator: EmailValidator,
 	) { }
 	handle(httpRequest: HttpRequest): HttpResponse {
-
-
-		const requiredField = ['name', 'email', 'password', 'passwordConfirmation']
-		for (const field of requiredField) {
-			if (!httpRequest.body[field]) return badRequest(new MissingParamError(field))
-		}
-		if (httpRequest.body.password !== httpRequest.body.passwordConfirmation) {
-			return badRequest(new InvalidParamError('passwordConfirmation'))
-		}
-		const isValid = this.emailValidator.isValid(httpRequest.body.email)
-		if (!isValid) {
-			return badRequest(new InvalidParamError('email'))
+		try {
+			const requiredField = ['name', 'email', 'password', 'passwordConfirmation']
+			for (const field of requiredField) {
+				if (!httpRequest.body[field]) return badRequest(new MissingParamError(field))
+			}
+			if (httpRequest.body.password !== httpRequest.body.passwordConfirmation) {
+				return badRequest(new InvalidParamError('passwordConfirmation'))
+			}
+			const isValid = this.emailValidator.isValid(httpRequest.body.email)
+			if (!isValid) {
+				return badRequest(new InvalidParamError('email'))
+			}
+		} catch (error: any) {
+			return {
+				statusCode: 500,
+				body: error
+			}
 		}
 	}
 }
