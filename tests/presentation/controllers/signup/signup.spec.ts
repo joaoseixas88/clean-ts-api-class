@@ -122,7 +122,7 @@ describe('SignUp Controller', () => {
 	test('Should return 500 if EmailValidator throws', () => {
 		class EmailValidatorStub implements EmailValidator {
 			isValid(email: string): boolean {
-				throw new ServerError()
+				throw new Error('Something wrong')
 			}
 		}
 		const makeSut = (): SutTypes => {
