@@ -1,5 +1,5 @@
 import { SignUpController } from "@/presentation/controllers/signup/signup"
-import { MissingParamError } from "@/presentation/errors"
+import { InvalidFieldError, MissingParamError } from "@/presentation/errors"
 
 
 describe('SignUp Controller', () => {
@@ -48,12 +48,26 @@ describe('SignUp Controller', () => {
 			body: {
 				name: 'any_name',
 				email: 'any_email',
-				password: 'password',
+				password: 'any_password',
 			}
 		}
 		const httpResponse = sut.handle(httpRequest)
 		expect(httpResponse.statusCode).toBe(400)
 		expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
+	})
+	test('Should return 400 if no passwordConfirmation is not equal to password', () => {
+		const sut = new SignUpController()
+		const httpRequest = {
+			body: {
+				name: 'any_name',
+				email: 'any_email',
+				password: 'any_password',
+				passwordConfirmation: 'different_password'
+			}
+		}
+		const httpResponse = sut.handle(httpRequest)
+		expect(httpResponse.statusCode).toBe(400)
+		expect(httpResponse.body).toEqual(new InvalidFieldError('passwordConfirmation'))
 	})
 
 
