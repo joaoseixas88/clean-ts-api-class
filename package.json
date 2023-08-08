@@ -27,7 +27,7 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --exit-child --respawn --transpile-only src/start",
     "build": "rimraf dist && tsc",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --passWithNoTests",
+    "test:watch": "yarn test --watch"
   }
 }
