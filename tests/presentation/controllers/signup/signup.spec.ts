@@ -1,8 +1,5 @@
-import { AccountModel } from "@/domain/models"
-import { AddAccount } from "@/domain/usecases"
-import { SignUpController } from "@/presentation/controllers/signup/signup"
+import { AccountModel, AddAccount, EmailValidator, SignUpController } from '@/presentation/controllers/signup'
 import { InvalidParamError, MissingParamError, ServerError } from "@/presentation/errors"
-import { EmailValidator } from "@/presentation/protocols"
 
 type SutTypes = {
 	sut: SignUpController,
@@ -144,7 +141,6 @@ describe('SignUp Controller', () => {
 		sut.handle(httpRequest)
 		expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
 	})
-
 	test('Should return 500 if EmailValidator throws', () => {
 
 		const { sut, emailValidatorStub } = makeSut()
