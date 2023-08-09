@@ -17,14 +17,6 @@ const makeEmailValidator = () => {
 	return new EmailValidatorStub()
 }
 
-const makeEmailValidatorWihError = () => {
-	class EmailValidatorStub implements EmailValidator {
-		isValid(email: string): boolean {
-			throw new Error('Something wrong')
-		}
-	}
-	return new EmailValidatorStub()
-}
 
 const makeSut = (): SutTypes => {
 	const emailValidatorStub = makeEmailValidator()
@@ -102,7 +94,6 @@ describe('SignUp Controller', () => {
 		expect(httpResponse.statusCode).toBe(400)
 		expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
 	})
-
 	test('Should return 400 if an invalid email is provided', () => {
 		const { sut, emailValidatorStub } = makeSut()
 		jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
@@ -134,8 +125,10 @@ describe('SignUp Controller', () => {
 	})
 	test('Should return 500 if EmailValidator throws', () => {
 
-		const emailValidatorStub = makeEmailValidatorWihError()
-		const sut = new SignUpController(emailValidatorStub)
+		const { sut, emailValidatorStub } = makeSut()
+		jest.spyOn(emailValidatorStub, 'isValid').mockImplementation(() => {
+			throw new Error()
+		})
 		const httpRequest = {
 			body: {
 				name: 'any_name',
@@ -148,6 +141,4 @@ describe('SignUp Controller', () => {
 		expect(httpResponse.statusCode).toBe(500)
 		expect(httpResponse.body).toEqual(new ServerError())
 	})
-
-
 })
