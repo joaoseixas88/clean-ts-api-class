@@ -7,14 +7,27 @@ type SutTypes = {
 	emailValidatorStub: EmailValidator
 }
 
-class EmailValidatorStub implements EmailValidator {
-	isValid(email: string): boolean {
-		return true
+
+const makeEmailValidator = () => {
+	class EmailValidatorStub implements EmailValidator {
+		isValid(email: string): boolean {
+			return true
+		}
 	}
+	return new EmailValidatorStub()
+}
+
+const makeEmailValidatorWihError = () => {
+	class EmailValidatorStub implements EmailValidator {
+		isValid(email: string): boolean {
+			throw new Error('Something wrong')
+		}
+	}
+	return new EmailValidatorStub()
 }
 
 const makeSut = (): SutTypes => {
-	const emailValidatorStub = new EmailValidatorStub()
+	const emailValidatorStub = makeEmailValidator()
 	const sut = new SignUpController(emailValidatorStub)
 	return {
 		sut,
@@ -120,22 +133,9 @@ describe('SignUp Controller', () => {
 		expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
 	})
 	test('Should return 500 if EmailValidator throws', () => {
-		class EmailValidatorStub implements EmailValidator {
-			isValid(email: string): boolean {
-				throw new Error('Something wrong')
-			}
-		}
-		const makeSut = (): SutTypes => {
-			const emailValidatorStub = new EmailValidatorStub()
-			const sut = new SignUpController(emailValidatorStub)
-			return {
-				sut,
-				emailValidatorStub
-			}
-		}
 
-		const { sut, emailValidatorStub } = makeSut()
-		const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+		const emailValidatorStub = makeEmailValidatorWihError()
+		const sut = new SignUpController(emailValidatorStub)
 		const httpRequest = {
 			body: {
 				name: 'any_name',
