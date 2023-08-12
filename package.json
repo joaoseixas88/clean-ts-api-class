@@ -27,7 +27,11 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --exit-child --respawn --transpile-only src/start",
     "build": "rimraf dist && tsc",
-    "test": "jest --passWithNoTests",
-    "test:watch": "yarn test --watch"
+    "test": "jest --passWithNoTests --silent --noStackTrace",
+    "test:verbose": "jest --passWithNoTests",
+    "test:unit": "yarn test --watch -c jest-unit-config.ts",
+    "test:integration": "yarn test --watch -c jest-integration-config.ts",
+    "test:staged": "yarn test --findRelatedTests",
+    "test:ci": "yarn test --coverage"
   }
 }
