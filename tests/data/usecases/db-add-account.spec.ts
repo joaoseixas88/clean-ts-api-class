@@ -1,5 +1,27 @@
 import { Encrypter } from "@/data/protocols"
+import { AddAccountRepository } from "@/data/repositories"
 import { DbAddAccount } from "@/data/usecases"
+import { AccountModel } from "@/domain/models"
+import { AddAccount } from "@/domain/usecases"
+type SutType = {
+	sut: AddAccount
+	encrypterStub: Encrypter
+	addAccountRepositoryStub: AddAccountRepository
+}
+
+const makeAddAccountRepositoryStub = () => {
+	class AddAccountRepositoryStub implements AddAccountRepository {
+		add(params: AddAccountRepository.Params): Promise<AccountModel> {
+			return new Promise(res => res({
+				id: 'valid_id',
+				name: 'valid_name',
+				email: 'valid_email',
+				password: 'hashed_password'
+			}))
+		}
+	}
+	return new AddAccountRepositoryStub()
+}
 
 const makeEncrypter = () => {
 	class EncrypterStub implements Encrypter {
@@ -11,10 +33,11 @@ const makeEncrypter = () => {
 }
 
 
-const makeSut = () => {
+const makeSut = (): SutType => {
+	const addAccountRepositoryStub = makeAddAccountRepositoryStub()
 	const encrypterStub = makeEncrypter()
-	const sut = new DbAddAccount(encrypterStub)
-	return { sut, encrypterStub }
+	const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
+	return { sut, encrypterStub, addAccountRepositoryStub }
 }
 
 describe('DbAddAccount Usecase', () => {
@@ -41,5 +64,16 @@ describe('DbAddAccount Usecase', () => {
 		}
 		const promise = sut.add(accountData)
 		await expect(promise).rejects.toThrow()
+	})
+	test('Should call AddAccountRepository witch correct values', async () => {
+		const { sut, addAccountRepositoryStub } = makeSut()
+		const addAccountRepositorySpy = jest.spyOn(addAccountRepositoryStub, 'add')
+		const accountData = {
+			name: 'valid_name',
+			email: 'valid_email',
+			password: 'hashed_password'
+		}
+		await sut.add(accountData)
+		expect(addAccountRepositorySpy).toHaveBeenCalledWith(accountData)
 	})
 })
