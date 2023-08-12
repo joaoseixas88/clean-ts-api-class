@@ -1,15 +1,19 @@
 import { Encrypter } from "@/data/protocols"
 import { DbAddAccount } from "@/data/usecases"
 
-class EncrypterStub implements Encrypter {
-	async encrypt(value: string): Promise<string> {
-		return new Promise(res => res('hashed_password'))
+const makeEncrypter = () => {
+	class EncrypterStub implements Encrypter {
+		async encrypt(value: string): Promise<string> {
+			return new Promise(res => res('hashed_password'))
+		}
 	}
+	return new EncrypterStub()
 }
 
 
 const makeSut = () => {
-	const encrypterStub = new EncrypterStub()
+
+	const encrypterStub = makeEncrypter()
 	const sut = new DbAddAccount(encrypterStub)
 	return { sut, encrypterStub }
 }
