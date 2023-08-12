@@ -71,9 +71,13 @@ describe('DbAddAccount Usecase', () => {
 		const accountData = {
 			name: 'valid_name',
 			email: 'valid_email',
-			password: 'hashed_password'
+			password: 'valid_password'
 		}
 		await sut.add(accountData)
-		expect(addAccountRepositorySpy).toHaveBeenCalledWith(accountData)
+		expect(addAccountRepositorySpy).toHaveBeenCalledWith({
+			name: 'valid_name',
+			email: 'valid_email',
+			password: 'hashed_password'
+		})
 	})
 })
