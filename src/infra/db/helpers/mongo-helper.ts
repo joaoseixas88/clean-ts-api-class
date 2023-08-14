@@ -1,4 +1,4 @@
-import { Collection, MongoClient } from 'mongodb'
+import { Collection, MongoClient, WithId } from 'mongodb'
 
 class MongoHelper {
 	client: MongoClient | null
@@ -14,6 +14,16 @@ class MongoHelper {
 
 	getCollection(name: string): Collection {
 		return this.client.db().collection(name)
+	}
+	idMapper = <T = any>(params: WithId<T>): T => {
+		const data = {
+			...params
+		}
+		delete data._id
+		return {
+			...data,
+			id: params._id
+		} as T
 	}
 
 }

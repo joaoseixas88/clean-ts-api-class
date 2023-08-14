@@ -14,6 +14,10 @@ beforeAll(async () => {
 afterAll(async () => {
 	await mongoHelper.disconnect()
 })
+
+afterEach(async () => {
+	await collection.deleteMany({})
+})
 describe('MongoAccountRepository', () => {
 	test('Should return an account on success', async () => {
 		const sut = new MongoDbAccountRepository()
@@ -23,7 +27,6 @@ describe('MongoAccountRepository', () => {
 			password: "any_password"
 		}
 		const account = await sut.add(accountData)
-		await collection.deleteOne(account)
 		expect(account).toBeTruthy()
 		expect(account.id).toBeTruthy()
 		expect(account.name).toBe('any_name')
