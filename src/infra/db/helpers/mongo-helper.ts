@@ -4,7 +4,6 @@ class MongoHelper {
 	client: MongoClient | null
 	async connect(): Promise<void> {
 
-		console.log("process.env.MONGO_URL:", process.env.MONGO_URL);
 		this.client = await MongoClient.connect(process.env.MONGO_URL)
 	}
 	async disconnect(): Promise<void> {
