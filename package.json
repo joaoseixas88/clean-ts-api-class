@@ -32,7 +32,7 @@
     "string-width": "4.2.3"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --exit-child --transpile-only src/main/server.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --exit-child --transpile-only src/main/server.ts",
     "build": "rimraf dist && tsc",
     "test": "jest --passWithNoTests --silent --noStackTrace",
     "test:verbose": "jest --passWithNoTests",

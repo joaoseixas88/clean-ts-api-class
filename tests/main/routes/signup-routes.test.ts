@@ -1,5 +1,22 @@
 import request from 'supertest'
 import app from '@/main/config/app'
+import dotenv from 'dotenv'
+import { mongoHelper } from '@/infra/db'
+import { Collection } from 'mongodb'
+
+let collection: Collection
+beforeAll(async () => {
+	await mongoHelper.connect()
+	collection = mongoHelper.getCollection('accounts')
+})
+
+afterAll(async () => {
+	await mongoHelper.disconnect()
+})
+
+beforeEach(async () => {
+	await collection.deleteMany({})
+})
 
 describe('Body Parser Middleware', () => {
 	test('Should parse body as json', async () => {

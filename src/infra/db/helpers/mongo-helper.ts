@@ -1,10 +1,14 @@
+import env from '@/main/config/env'
 import { Collection, MongoClient, WithId } from 'mongodb'
 
 class MongoHelper {
 	client: MongoClient | null
 	async connect(): Promise<void> {
-
-		this.client = await MongoClient.connect(process.env.MONGO_URL)
+		this.client = await MongoClient.connect(env.mongoUrl,
+			{
+				connectTimeoutMS: 5000,
+				serverSelectionTimeoutMS: 5000
+			})
 	}
 	async disconnect(): Promise<void> {
 		if (this.client) {
