@@ -12,7 +12,6 @@ const makeSut = () => {
 	return sut
 }
 
-
 describe('EmailValidator Adapter', () => {
 	test('Should return false if validator returns false', () => {
 		const sut = makeSut()
