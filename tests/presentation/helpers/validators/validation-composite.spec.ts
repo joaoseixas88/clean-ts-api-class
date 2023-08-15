@@ -44,5 +44,11 @@ describe('ValidationComposite', () => {
 		expect(error).toEqual(new Error('any_error'))
 	})
 
+	it('Should return undefined if no one validation returns error', () => {
+		const { sut } = makeSut()
+
+		const error = sut.validate(makeParams())
+		expect(error).toBe(undefined)
+	})
 
 })
