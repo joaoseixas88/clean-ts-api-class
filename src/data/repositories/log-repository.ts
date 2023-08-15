@@ -1,3 +1,10 @@
 export interface LogRepository {
-	save(error: Error): Promise<void>
+	saveLog(stack: string): Promise<LogRepository.Result>
+}
+export namespace LogRepository {
+	export type Result = {
+		id: string
+		date: Date
+		stack: string
+	}
 }

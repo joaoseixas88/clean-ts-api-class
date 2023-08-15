@@ -1,8 +1,16 @@
 import { LogRepository } from "@/data/repositories";
+import { mongoHelper } from "../helpers";
+import { ObjectId, WithId } from "mongodb";
 
 export class MongoDbLogRepository implements LogRepository {
-	save(error: Error): Promise<void> {
-		throw new Error("Method not implemented.");
+	async saveLog(stack: string): Promise<LogRepository.Result> {
+		const logCollection = await mongoHelper.getCollection('logs')
+		const logSave = await logCollection.insertOne({
+			date: new Date(),
+			stack
+		})
+		const findResult = await logCollection.findOne<WithId<LogRepository.Result>>(logSave.insertedId)
+		return mongoHelper.idMapper(findResult)
 	}
 
 }
