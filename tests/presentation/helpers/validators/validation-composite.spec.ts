@@ -36,5 +36,13 @@ describe('ValidationComposite', () => {
 		sut.validate(makeParams())
 		expect(validateSpy).toHaveBeenCalledWith(makeParams())
 	})
+	it('Should returns an error if validate method returns an error', () => {
+		const { sut, validationStub } = makeSut()
+		jest.spyOn(validationStub, 'validate').mockReturnValue(new Error('any_error'))
+
+		const error = sut.validate(makeParams())
+		expect(error).toEqual(new Error('any_error'))
+	})
+
 
 })
