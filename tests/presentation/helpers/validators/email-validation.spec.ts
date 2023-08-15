@@ -26,5 +26,9 @@ describe('EmailValidation', () => {
 		const error = sut.validate(makeParams())
 		expect(error).toEqual(new InvalidParamError('email'))
 	})
-
+	it('It should return undefined if valid email is provided', () => {
+		const { sut } = makeSut()
+		const error = sut.validate(makeParams())
+		expect(error).toBe(undefined)
+	})
 })
