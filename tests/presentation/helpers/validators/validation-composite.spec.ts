@@ -29,5 +29,12 @@ describe('ValidationComposite', () => {
 		expect(validateSpy).toHaveBeenCalled()
 		expect(secondValidateSpy).toHaveBeenCalled()
 	})
+	it('Should call validate method with correct values', () => {
+		const { sut, validationStub, secondValidationStub } = makeSut()
+		const validateSpy = jest.spyOn(validationStub, 'validate')
+
+		sut.validate(makeParams())
+		expect(validateSpy).toHaveBeenCalledWith(makeParams())
+	})
 
 })
