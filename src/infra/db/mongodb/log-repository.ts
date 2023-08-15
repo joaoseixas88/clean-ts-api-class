@@ -3,7 +3,7 @@ import { mongoHelper } from "../helpers";
 import { ObjectId, WithId } from "mongodb";
 
 export class MongoDbLogRepository implements LogRepository {
-	async saveLog(stack: string): Promise<LogRepository.Result> {
+	async log(stack: string): Promise<LogRepository.Result> {
 		const logCollection = await mongoHelper.getCollection('logs')
 		const logSave = await logCollection.insertOne({
 			date: new Date(),
