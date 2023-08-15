@@ -2,8 +2,7 @@ import { LogControllerDecorator } from "@/main/decorators"
 import { Controller, HttpRequest, HttpResponse } from "@/presentation/protocols"
 
 
-
-const makeSut = () => {
+const makeController = (): Controller => {
 	class ControllerStub implements Controller {
 		handle(params: HttpRequest): Promise<HttpResponse> {
 			const httpReponse: HttpResponse = {
@@ -15,7 +14,11 @@ const makeSut = () => {
 			return new Promise(res => res(httpReponse))
 		}
 	}
-	const controllerStub = new ControllerStub()
+	return new ControllerStub()
+}
+
+const makeSut = () => {
+	const controllerStub = makeController()
 	const sut = new LogControllerDecorator(controllerStub)
 	return { sut, controllerStub }
 }
