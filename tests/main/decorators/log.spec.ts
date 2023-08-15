@@ -21,7 +21,7 @@ const makeSut = () => {
 }
 
 describe('Log Controller Decorator', () => {
-	it('Should call controller handle method', async () => {
+	it('Should call controller handle method with correct values', async () => {
 		const { sut, controllerStub } = makeSut()
 		const httpRequest: HttpRequest = {
 			body: {
@@ -36,7 +36,6 @@ describe('Log Controller Decorator', () => {
 		expect(handleSpy).toHaveBeenCalledWith(httpRequest)
 	})
 	it('Should returns same body as injected controller', async () => {
-
 		const { sut, controllerStub } = makeSut()
 		const httpRequest: HttpRequest = {
 			body: {
@@ -49,6 +48,6 @@ describe('Log Controller Decorator', () => {
 		const httpResponseWithoutLogger = await controllerStub.handle(httpRequest)
 		const httpResponseWithLogger = await sut.handle(httpRequest)
 		expect(httpResponseWithoutLogger).toEqual(httpResponseWithLogger)
-
 	})
+
 })
