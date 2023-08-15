@@ -9,5 +9,13 @@ export const adaptExpressRoute = (controller: Controller) => async (
 		body: req.body
 	}
 	const { statusCode, body } = await controller.handle(httpRequest)
-	return res.status(statusCode).json(body)
+	if (statusCode === 200) {
+		return res.status(statusCode).json(body)
+
+	} else {
+		return res.status(statusCode).json({
+			success: false,
+			message: body.message
+		})
+	}
 }

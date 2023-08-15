@@ -1,8 +1,7 @@
-import request from 'supertest'
-import app from '@/main/config/app'
-import dotenv from 'dotenv'
 import { mongoHelper } from '@/infra/db'
+import app from '@/main/config/app'
 import { Collection } from 'mongodb'
+import request from 'supertest'
 
 let collection: Collection
 beforeAll(async () => {
