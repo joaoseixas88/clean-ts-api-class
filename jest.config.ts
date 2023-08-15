@@ -8,6 +8,10 @@ import type { Config } from 'jest';
 const config: Config = {
 	collectCoverage: true,
 	coverageDirectory: "coverage",
+	collectCoverageFrom: [
+		"<rootDir>/src/**/*.ts",
+		"!<rootDir>/src/main/**",
+	],
 	// transformIgnorePatterns: ['<rootDir>/node_modules/'],
 	transform: {
 		"^.+\\.(t|j)sx?$": "@swc/jest"

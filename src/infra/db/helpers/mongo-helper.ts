@@ -1,10 +1,12 @@
 import env from '@/main/config/env'
 import { Collection, MongoClient, WithId } from 'mongodb'
-
+import { config } from 'dotenv'
+config()
 class MongoHelper {
 	client: MongoClient | null
 	async connect(): Promise<void> {
 		this.client = await MongoClient.connect(env.mongoUrl,
+
 			{
 				connectTimeoutMS: 5000,
 				serverSelectionTimeoutMS: 5000
@@ -12,11 +14,13 @@ class MongoHelper {
 	}
 	async disconnect(): Promise<void> {
 		if (this.client) {
-			this.client.close()
+			await this.client.close()
+			this.client = null
 		}
 	}
 
-	getCollection(name: string): Collection {
+	async getCollection(name: string): Promise<Collection> {
+		if (!this.client) await this.connect()
 		return this.client.db().collection(name)
 	}
 	idMapper = <T = any>(params: WithId<T>): T => {

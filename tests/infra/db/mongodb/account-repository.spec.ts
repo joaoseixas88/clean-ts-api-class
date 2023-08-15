@@ -1,24 +1,21 @@
-import { AccountModel } from "@/domain/models"
 import { MongoDbAccountRepository, mongoHelper } from "@/infra/db"
-import * as dotenv from 'dotenv'
 import { Collection } from "mongodb"
 
 let collection: Collection
 
-beforeAll(async () => {
-	dotenv.config()
-	await mongoHelper.connect()
-	collection = mongoHelper.getCollection('accounts')
-})
-
-afterAll(async () => {
-	await mongoHelper.disconnect()
-})
-
-afterEach(async () => {
-	await collection.deleteMany({})
-})
 describe('MongoAccountRepository', () => {
+	beforeAll(async () => {
+		await mongoHelper.connect()
+		collection = await mongoHelper.getCollection('accounts')
+	})
+
+	afterAll(async () => {
+		await mongoHelper.disconnect()
+	})
+
+	afterEach(async () => {
+		await collection.deleteMany({})
+	})
 	test('Should return an account on success', async () => {
 		const sut = new MongoDbAccountRepository()
 		const accountData = {

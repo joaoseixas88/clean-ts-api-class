@@ -7,7 +7,7 @@ import { Collection } from 'mongodb'
 let collection: Collection
 beforeAll(async () => {
 	await mongoHelper.connect()
-	collection = mongoHelper.getCollection('accounts')
+	collection = await mongoHelper.getCollection('accounts')
 })
 
 afterAll(async () => {
