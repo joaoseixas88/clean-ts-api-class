@@ -6,8 +6,13 @@ import { Controller, HttpRequest, HttpResponse } from "@/presentation/protocols"
 const makeSut = () => {
 	class ControllerStub implements Controller {
 		handle(params: HttpRequest): Promise<HttpResponse> {
-			// throw new Error("Method not implemented.")
-			return new Promise(res => res({ statusCode: 200 }))
+			const httpReponse: HttpResponse = {
+				statusCode: 200,
+				body: {
+					name: 'any_name'
+				}
+			}
+			return new Promise(res => res(httpReponse))
 		}
 	}
 	const controllerStub = new ControllerStub()
@@ -18,14 +23,16 @@ const makeSut = () => {
 describe('Log Controller Decorator', () => {
 	it('Should call controller handle method', async () => {
 		const { sut, controllerStub } = makeSut()
-		const httpRequest = {
-			name: 'any_name',
-			email: 'any_email@mail.com',
-			password: 'any_password',
-			passwordConfirmation: 'any_password'
+		const httpRequest: HttpRequest = {
+			body: {
+				name: 'any_name',
+				email: 'any_email@mail.com',
+				password: 'any_password',
+				passwordConfirmation: 'any_password'
+			}
 		}
-		const controllerStubSpy = jest.spyOn(controllerStub, 'handle')
-		const httpResponse = await sut.handle({ body: httpRequest })
-		expect(controllerStubSpy).toBeCalled()
+		const handleSpy = jest.spyOn(controllerStub, 'handle')
+		await sut.handle(httpRequest)
+		expect(handleSpy).toHaveBeenCalledWith(httpRequest)
 	})
 })
