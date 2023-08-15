@@ -1,10 +1,10 @@
 import { MissingParamError } from "@/presentation/errors"
-import { RequiredFieldValidation } from "@/presentation/helpers"
+import { RequiredFieldsValidation } from "@/presentation/helpers"
 
 
 const makeSut = () => {
 	const requiredField = ['name', 'password', 'email']
-	const sut = new RequiredFieldValidation(requiredField)
+	const sut = new RequiredFieldsValidation(requiredField)
 	return sut
 }
 
