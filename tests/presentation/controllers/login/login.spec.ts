@@ -106,7 +106,7 @@ describe('LoginController', () => {
 	it('Should return 200 if valid credentials are provided', async () => {
 		const { sut } = makeSut()
 		const httpResponse = await sut.handle(makeHttpRequest())
-		expect(httpResponse).toEqual(success('any_access_token'))
+		expect(httpResponse).toEqual(success({ accessToken: 'any_access_token' }))
 
 	})
 

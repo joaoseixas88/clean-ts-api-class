@@ -9,9 +9,9 @@ export class LoginController implements Controller {
 		try {
 			const error = this.validation.validate(params)
 			if (error) return new Promise(res => res(badRequest(error)))
-			const token = await this.authentication.auth(params.body)
-			if (!token) return unauthorized()
-			return success(token)
+			const accessToken = await this.authentication.auth(params.body)
+			if (!accessToken) return unauthorized()
+			return success({ accessToken })
 		} catch (error) {
 			return serverError(error)
 		}
