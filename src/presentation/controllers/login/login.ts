@@ -1,5 +1,5 @@
 import { MissingParamError } from "@/presentation/errors";
-import { Authentication, Controller, HttpRequest, HttpResponse, Validation, badRequest, serverError, success } from "../signup";
+import { Authentication, Controller, HttpRequest, HttpResponse, Validation, badRequest, serverError, success, unauthorized } from "../signup";
 
 export class LoginController implements Controller {
 	constructor(
@@ -11,6 +11,7 @@ export class LoginController implements Controller {
 			const error = this.validation.validate(params)
 			if (error) return new Promise(res => res(badRequest(error)))
 			const token = await this.authentication.auth(params.body)
+			if (!token) return unauthorized()
 			return new Promise(res => res(success()))
 		} catch (error) {
 			return serverError(error)
