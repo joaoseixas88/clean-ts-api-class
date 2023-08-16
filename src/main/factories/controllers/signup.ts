@@ -1,12 +1,11 @@
 import { SignUpController } from "@/presentation/controllers"
+import { makeLogControllerDecorator, makeValidatorControllerDecorator } from "../decorators"
 import { makeAddAccountUsecase } from "../usecases"
 import { makeSignupValidation } from "../validations"
-import { EmailValidatorAdapter } from "@/presentation/utils"
-import { makeEmailValidator } from "../utils"
-import { makeLogControllerDecorator } from "../decorators"
 
 export const makeSignUpController = () => {
+	const validation = makeSignupValidation()
 	const signUpController =
-		new SignUpController(makeSignupValidation(), makeAddAccountUsecase())
-	return makeLogControllerDecorator(signUpController)
+		new SignUpController(makeAddAccountUsecase())
+	return makeValidatorControllerDecorator({ controller: makeLogControllerDecorator(signUpController), validation })
 }
