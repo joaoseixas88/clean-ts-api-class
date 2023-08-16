@@ -1,5 +1,4 @@
-import { MissingParamError } from "@/presentation/errors";
-import { Authentication, Controller, HttpRequest, HttpResponse, Validation, badRequest, serverError, success, unauthorized } from "../signup";
+import { Authentication, Controller, HttpRequest, HttpResponse, Validation, badRequest, serverError, success, unauthorized } from "./login-protocols";
 
 export class LoginController implements Controller {
 	constructor(

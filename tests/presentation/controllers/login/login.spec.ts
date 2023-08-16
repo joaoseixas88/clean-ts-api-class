@@ -1,6 +1,7 @@
-import { InvalidParamError, MissingParamError } from "@/presentation/errors"
-import { Authentication, Validation, serverError, unauthorized } from "../signup"
-import { LoginController } from "./login"
+import { Authentication } from '@/domain/usecases';
+import { LoginController, serverError, unauthorized } from '@/presentation/controllers';
+import { MissingParamError, InvalidParamError } from '@/presentation/errors';
+import { Validation } from '@/presentation/protocols';
 
 const makeHttpRequest = {
 
