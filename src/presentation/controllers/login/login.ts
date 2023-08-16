@@ -5,7 +5,11 @@ export class LoginController implements Controller {
 	constructor(
 	) { }
 	handle(params: HttpRequest): Promise<HttpResponse> {
-
-		return new Promise(res => res(badRequest(new MissingParamError('email'))))
+		if (!params.body['email']) {
+			return new Promise(res => res(badRequest(new MissingParamError('email'))))
+		}
+		if (!params.body['password']) {
+			return new Promise(res => res(badRequest(new MissingParamError('password'))))
+		}
 	}
 }
