@@ -1,11 +1,14 @@
 import { Authentication } from '@/domain/usecases';
-import { LoginController, serverError, unauthorized } from '@/presentation/controllers';
+import { LoginController, serverError, success, unauthorized } from '@/presentation/controllers';
 import { MissingParamError, InvalidParamError } from '@/presentation/errors';
 import { Validation } from '@/presentation/protocols';
 
-const makeHttpRequest = {
-
-}
+const makeHttpRequest = () => ({
+	body: {
+		email: 'any_email@mail.com',
+		password: 'any_password'
+	}
+})
 
 const makeSut = () => {
 	const requiredFields = ['email', 'password']
@@ -19,7 +22,7 @@ const makeSut = () => {
 	const validationStub = new ValidationCompositeStub()
 	class AuthenticationStub implements Authentication {
 		async auth(params: { email: string, password: string }): Promise<string> {
-			return new Promise(res => res('access_token'))
+			return new Promise(res => res('any_access_token'))
 		}
 	}
 	const authenticationStub = new AuthenticationStub()
@@ -64,12 +67,7 @@ describe('LoginController', () => {
 		jest.spyOn(authenticationStub, 'auth').mockImplementation(() => {
 			throw new Error()
 		})
-		const httpResponse = await sut.handle({
-			body: {
-				email: 'any_email@mail.com',
-				password: 'any_password'
-			}
-		})
+		const httpResponse = await sut.handle(makeHttpRequest())
 		expect(httpResponse).toEqual(serverError(new Error()))
 	})
 	it('Should return 401 if invalid credentials', async () => {
@@ -102,16 +100,14 @@ describe('LoginController', () => {
 	it('Should call Authentication with correct values', async () => {
 		const { sut, authenticationStub } = makeSut()
 		const authSpy = jest.spyOn(authenticationStub, 'auth')
-		const { statusCode, body } = await sut.handle({
-			body: {
-				email: 'any_email@mail.com',
-				password: 'any_password'
-			}
-		})
-		expect(authSpy).toHaveBeenCalledWith({
-			email: 'any_email@mail.com',
-			password: 'any_password'
-		})
+		await sut.handle(makeHttpRequest())
+		expect(authSpy).toHaveBeenCalledWith(makeHttpRequest().body)
+	})
+	it('Should return 200 if valid credentials are provided', async () => {
+		const { sut } = makeSut()
+		const httpResponse = await sut.handle(makeHttpRequest())
+		expect(httpResponse).toEqual(success('any_access_token'))
+
 	})
 
 })

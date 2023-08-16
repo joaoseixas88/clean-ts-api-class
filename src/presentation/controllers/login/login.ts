@@ -11,7 +11,7 @@ export class LoginController implements Controller {
 			if (error) return new Promise(res => res(badRequest(error)))
 			const token = await this.authentication.auth(params.body)
 			if (!token) return unauthorized()
-			return new Promise(res => res(success()))
+			return success(token)
 		} catch (error) {
 			return serverError(error)
 		}
