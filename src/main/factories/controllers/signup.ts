@@ -7,6 +7,6 @@ import { makeLogControllerDecorator } from "../decorators"
 
 export const makeSignUpController = () => {
 	const signUpController =
-		new SignUpController(makeSignupValidation(), makeEmailValidator(), makeAddAccountUsecase())
+		new SignUpController(makeSignupValidation(), makeAddAccountUsecase())
 	return makeLogControllerDecorator(signUpController)
 }

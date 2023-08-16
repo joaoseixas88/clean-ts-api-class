@@ -12,7 +12,6 @@ type IRequest = {
 export class SignUpController implements Controller {
 	constructor(
 		private readonly validation: Validation,
-		private readonly emailValidator: EmailValidatorAdapter,
 		private readonly addAccount: AddAccount,
 
 	) { }
@@ -21,8 +20,6 @@ export class SignUpController implements Controller {
 			const error = this.validation.validate(httpRequest.body)
 			if (error) return badRequest(error)
 			const { body: { email, name, password } } = httpRequest
-			const isEmailValid = this.emailValidator.isValid(email)
-			if (!isEmailValid) return badRequest(new InvalidParamError('email'))
 			const account = await this.addAccount.add({
 				email,
 				name,
